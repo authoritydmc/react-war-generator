@@ -94,8 +94,6 @@ The script uses a configuration file (`createWar.config.json`) to store default 
   "versiongen": true,
   "distdir": "dist"  # Configurable directory for frontend build assets
 }
-
-
 ```
 
 #### Configuration Options:
@@ -105,7 +103,7 @@ The script uses a configuration file (`createWar.config.json`) to store default 
 | `profile`     | The build profile to use (`dev`, `test`, `prod`, `default`).                                      | `default`                                    |
 | `tomcatpath`  | The path to the Tomcat `webapps` folder for deployment (if `deploy` is `True`).                     | `C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps` |
 | `deploy`      | Whether to deploy the WAR file to Tomcat.                                                          | `False`                                     |
-| `name`        | The name of the WAR file.                                                                         | `"myapp.war"`                               |
+| `name`        | The name of the WAR file. Ensure that this name matches the context path for your application. For example, if your application is accessed via '/myapp/', set the name to 'myapp.war'. Misalignment can cause the app to fail to load properly. | `"myapp.war"`                               |
 | `versiongen`  | Whether to generate a version file.                                                               | `True`                                      |
 | `distdir`     | The directory for frontend build assets (e.g., `dist` for React or `out` for Next.js).              | `"dist"`                                    |
 
@@ -113,9 +111,31 @@ The script uses a configuration file (`createWar.config.json`) to store default 
 
 The `distdir` configuration allows you to specify the directory where your frontend build assets are located:
 
-- **React**: Typically `dist` (default), but can be configured.
-- **Next.js**: Typically `out` for static exports.
+- **React**: Typically `dist` (default), but can be configured. Make sure to set the `homepage` field in `package.json` to match the context path used for deployment.
+- **Next.js**: Typically `out` for static exports. Ensure that your `next.config.js` is set up to correctly handle the export path.
 
-Ensure that the `distdir` matches the directory used by your frontend framework to store build outputs.
+### Important Warning
+
+**Context Path Warning**: The WAR file name (`name` field) directly affects the context path of your application. Ensure that this name matches the context path used to access your application. For example, if you deploy your application to be accessed via `http://example.com/myapp/`, the `name` should be `myapp.war`. Failure to align this with your application's expected context path may result in loading issues.
+
+### Examples for Setting Context Path
+
+- **React**: In `package.json`, set the `homepage` field:
+  ```json
+  {
+    "homepage": "/myapp/"
+  }
+  ```
+
+- **Vite**: In `vite.config.js`, set the `base` option:
+  ```js
+  import { defineConfig } from 'vite';
+
+  export default defineConfig({
+    base: '/myapp/'
+  });
+  ```
+
+Make sure these settings are consistent with your WAR file's context path to ensure correct functionality.
 
 ---
