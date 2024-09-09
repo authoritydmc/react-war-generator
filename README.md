@@ -139,3 +139,4 @@ The `distdir` configuration allows you to specify the directory where your front
 Make sure these settings are consistent with your WAR file's context path to ensure correct functionality.
 
 ---
+For more detailed information about the version generation script, see the [VERSIONREADME.md](./VERSION_GEN_README.md) file.
