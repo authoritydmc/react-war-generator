@@ -1,99 +1,72 @@
 # WAR File Generator
 
-This Python script automates the creation of a WAR file based on a specified profile (`dev`, `test`, `prod`). It also offers the option to generate a version file and deploy the WAR file to a Tomcat server. The script allows for customization via command-line arguments or a `createWar.config.json` configuration file. Command-line arguments take precedence over the configuration file values if both are provided.
+This utility automates the creation of WAR files for different environments (`dev`, `test`, `prod`), allowing for version file generation and optional deployment to a Tomcat server. It supports customization via a `createWar.config.json` configuration file, with command-line arguments taking precedence.
 
 ## Features
 
-- **Create WAR files** based on different profiles (`dev`, `test`, `prod`). [ for info on what is profile check `sample_package.json` file.]
-- **Generate a version file** based on the `versiongen` setting.
-- **Deploy the WAR file** to a specified Tomcat server automatically.
-- **Customize settings** using command-line arguments or a configuration file (`createWar.config.json`).
-- **Automatically create** the `createWar.config.json` file with default values if it doesn't exist.
-- **Clean-up temporary files** after creating the WAR file.
-
-## How to Use
-
-### 1. Using `createWar.exe`
-
-To make the process even simpler, the entire Python script has been converted into an executable file (`createWar.exe`). This allows you to use the tool without needing to have Python or the dependencies installed on your system. Simply follow the steps below to generate a WAR file for your project with minimal effort.
-
-### How to Use the `createWar.exe` File
-
-1. **Download or Copy the `createWar.exe` file** into the root folder of your project, where the `package.json` file is located. This is essential as the script looks for `npm` commands to build the project.
-
-2. **Run the `createWar.exe`**:
-   - **Double-click the `createWar.exe`** file to run it.
-   - Alternatively, you can **invoke it via the command line** (especially useful for passing arguments):
-     ```bash
-     ./createWar.exe
-     ```
-
-3. Once executed, the tool will:
-   - **Read the configuration file** (`createWar.config.json`) or create one if it doesn't exist.
-   - **Build the project** using the profile specified in the configuration file or command-line arguments.
-   - **Create the WAR file** and, if enabled, **deploy it** to the Tomcat server.
-
-### Command-line Arguments (Optional)
-
-If you want to pass command-line arguments while running the executable (instead of using the default values from the configuration file), you can invoke the `.exe` file from the terminal or command prompt with the necessary options:
-
-#### Example Usage:
-
-```bash
-./createWar.exe --profile dev --tomcatpath "/opt/tomcat/webapps" --deploy True --versiongen False
-```
-
-This will:
-- Use the `dev` profile to build the project.
-- Deploy the WAR file to `/opt/tomcat/webapps`.
-- Skip the version file generation (`--versiongen False`).
-
-### Benefits of Using `createWar.exe`
-
-- **No Python required**: You don't need Python or additional libraries installed to use the script.
-- **Simplified Process**: Just place the executable in the project root, double-click, and let it do the work for you.
-- **Configuration Flexibility**: Either edit the `createWar.config.json` file or pass arguments when invoking the `.exe` file via the command line.
-- **Fast and Easy Deployment**: If the `deploy` option is enabled, the WAR file is automatically deployed to Tomcat.
+- **WAR File Creation**: Build WAR files for `dev`, `test`, or `prod` profiles.
+- **Version File Generation**: Optionally generate a version file.
+- **Tomcat Deployment**: Deploy the WAR file to a Tomcat server.
+- **Configuration Flexibility**: Use command-line arguments or a JSON config file.
+- **Automatic Config File Creation**: Generates a default `createWar.config.json` if not present.
 
 ---
 
-### 2. Command-line Arguments
+## Usage Options
 
-The script can be executed with command-line arguments for flexibility. Here are the available arguments:
+### 1. Using `createWar.exe`
 
-| Argument          | Short Flag | Description                                                                                     | Default    |
-|-------------------|------------|-------------------------------------------------------------------------------------------------|------------|
-| `--profile`       | `-p`       | Specify the profile to use (`dev`, `test`, `prod`).                                              | `prod`     |
-| `--tomcatpath`    | `-tp`      | Specify the path to the Tomcat `webapps` folder.                                                 | Configured path in JSON file |
-| `--deploy`        | `-d`       | Deploy the WAR file to the Tomcat server (`True` for deployment).                                | `False`    |
-| `--name`          | `-n`       | Specify the name of the WAR file to generate.                                                    | Folder name of the project |
-| `--versiongen`    | `-vg`      | Set `True` to generate a version file. Use `False` to skip version generation.                   | `True`     |
+Simplified execution is available via the `createWar.exe` file.
 
-#### Example Usage
+1. **Copy `createWar.exe`** to the root of your project (where `package.json` is located).
+2. **Run**:
+   - **Double-click** `createWar.exe` or
+   - **Run via terminal** for argument passing:
+     ```bash
+     ./createWar.exe --profile dev --deploy True
+     ```
+3. The executable will:
+   - Read `createWar.config.json` or create it with default settings.
+   - Build and optionally deploy the WAR file.
 
-1. **Generate a WAR file with the `dev` profile:**
+#### Example:
+```bash
+./createWar.exe --profile prod --tomcatpath "/opt/tomcat/webapps" --deploy True
+```
 
-   ```bash
-   python create_war.py --profile dev
-   ```
+---
 
-2. **Generate and deploy a WAR file to a custom Tomcat path:**
+### 2. Running the Python Script
 
-   ```bash
-   python create_war.py --profile prod --tomcatpath "/opt/tomcat/webapps" --deploy
-   ```
+The Python version of the tool allows more flexibility with command-line arguments:
 
-3. **Skip version file generation:**
+| Argument          | Description                                                    | Default      |
+|-------------------|----------------------------------------------------------------|--------------|
+| `--profile`       | Specify profile (`dev`, `test`, `prod`)                        | `prod`       |
+| `--tomcatpath`    | Tomcat `webapps` folder path                                   | Config file  |
+| `--deploy`        | Set to `True` to deploy the WAR file                           | `False`      |
+| `--name`          | Name of the WAR file                                           | Project name |
+| `--versiongen`    | Set `True` to generate version file                            | `True`       |
 
-   ```bash
-   python create_war.py --versiongen False
-   ```
+#### Examples:
 
-### 2. Configuration File (`createWar.config.json`)
+- Generate WAR for `dev`:
+  ```bash
+  python create_war.py --profile dev
+  ```
 
-The script uses a `createWar.config.json` file to store configuration values. If the file doesn't exist, the script will create one with default values. You can edit this file to customize the behavior of the script.
+- Deploy WAR to Tomcat:
+  ```bash
+  python create_war.py --profile prod --deploy True
+  ```
 
-#### Example `createWar.config.json`:
+---
+
+## Configuration File (`createWar.config.json`)
+
+The configuration file is automatically created if missing. It provides default settings for WAR file generation and deployment.
+
+#### Sample `createWar.config.json`:
 
 ```json
 {
@@ -105,64 +78,27 @@ The script uses a `createWar.config.json` file to store configuration values. If
 }
 ```
 
-#### Configuration Options
+| Key           | Description                                                   | Default      |
+|---------------|---------------------------------------------------------------|--------------|
+| `profile`     | Build profile (`dev`, `test`, `prod`)                         | `prod`       |
+| `tomcatpath`  | Tomcat `webapps` deployment path                              | Configured path |
+| `deploy`      | Deploy to Tomcat (`true` or `false`)                          | `false`      |
+| `name`        | WAR file name                                                 | Project name |
+| `versiongen`  | Generate version file (`true` or `false`)                     | `true`       |
 
-| Key           | Description                                                                                       | Default                                      |
-|---------------|---------------------------------------------------------------------------------------------------|----------------------------------------------|
-| `profile`     | The build profile to use (`dev`, `test`, or `prod`).                                               | `prod`                                       |
-| `tomcatpath`  | The path to the Tomcat `webapps` folder where the WAR file will be deployed (if `deploy` is `True`).| `C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps` |
-| `deploy`      | Set to `true` if you want to automatically deploy the generated WAR file to Tomcat.                | `false`                                      |
-| `name`        | The name of the WAR file to be generated.                                                          | `"myapp.war"`                                |
-| `versiongen`  | Set to `true` if you want to generate a version file. Set to `false` to skip version generation.    | `true`                                       |
+---
 
-#### Example Usage with Configuration File
+## Workflow
 
-If you run the script without any command-line arguments, it will use the values from the `createWar.config.json` file:
+1. **Build**: Runs `npm run build:<profile>` based on the profile.
+2. **Version Generation**: Generates a version file if enabled.
+3. **WAR Creation**: Packages files into a WAR with optional `web.xml` for custom error handling.
+4. **Deployment**: Copies WAR to Tomcat `webapps` if enabled.
+5. **Clean-up**: Temporary directories are removed post-WAR creation.
 
-```bash
-python create_war.py
-```
+---
 
-In this case, the script will:
-- Use the `prod` profile.
-- Create a WAR file named `myapp.war`.
-- Deploy the WAR file to `C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps` if `deploy` is set to `true`.
-- Generate a version file if `versiongen` is `true`.
+## Notes
 
-### 3. Command-line Arguments Take Precedence
-
-When both command-line arguments and configuration file values are available, the command-line arguments take precedence.
-
-For example, if `createWar.config.json` sets the profile to `prod` but you run the script with the `--profile dev` flag, the `dev` profile will be used:
-
-```bash
-python create_war.py --profile dev
-```
-
-### 4. Script Workflow
-
-1. **Profile Selection**:
-   - The script uses the `profile` (either from the config file or command-line) to run the build command: `npm run build:<profile>`.
-
-2. **Version File Generation**:
-   - If `versiongen` is `True`, the script generates a version file using the function `versionGenerator.generateVersionFile()`.
-   - If `versiongen` is `False`, version generation is skipped.
-
-3. **WAR File Creation**:
-   - The script copies frontend assets from the build directory into a temporary directory (`war_temp`).
-   - A `WEB-INF/web.xml` file is added, which includes a 404 error page redirect.
-   - All files in the temporary directory are zipped into a WAR file with the specified name.
-
-4. **Deployment (Optional)**:
-   - If `deploy` is set to `True`, the WAR file is copied to the Tomcat `webapps` folder.
-
-5. **Clean-up**:
-   - The script deletes the temporary directory (`war_temp`) after creating the WAR file.
-
-### 5. Error Handling
-
-If an error occurs during the deployment process, the script will output an error message.
-
-```bash
-Error occurred while copying to Tomcat: <error_message>
-```
+- **Command-line overrides config**: Arguments passed via CLI take precedence over the JSON config file.
+- **Error Handling**: Errors during deployment will display the message `Error occurred while copying to Tomcat: <error_message>`.
