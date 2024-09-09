@@ -14,7 +14,7 @@ This tool automates the creation of a WAR file for Java web applications. It sup
 ## Prerequisites
 
 - Ensure you have Node.js installed for building frontend assets.
-- Have Python installed if using the script directly.
+- Have Python installed if using the script directly. [ only if you want to use script directly | in exe no need of it ]
 
 ## How to Use
 
