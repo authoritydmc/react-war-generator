@@ -1,45 +1,51 @@
 # WAR File Generator
 
-This tool automates the creation of a WAR file for Java web applications, using a specified profile (`dev`, `test`, `prod`, `default`). It supports generating a version file and deploying the WAR file to a Tomcat server. The configuration can be customized using either command-line arguments or a `createWar.config.json` configuration file. Command-line arguments take precedence over configuration file values if both are provided.
+This tool automates the creation of a WAR file for Java web applications. It supports multiple profiles (`dev`, `test`, `prod`, `default`), optional version file generation, and deployment to a Tomcat server. The tool can handle different frontend build directories such as React’s `dist` or Next.js’s `out`.
 
 ## Features
 
-- **Create WAR files** based on different profiles (`dev`, `test`, `prod`, `default`).
-- **Generate a version file** based on the `versiongen` setting.
-- **Deploy the WAR file** to a specified Tomcat server.
-- **Automatic Configuration**: The `createWar.config.json` file is automatically created with default values if it doesn’t exist.
-- **Clean-Up**: Temporary files are automatically cleaned up after the WAR file is created.
+- **Profile-Based Builds**: Create WAR files based on specified profiles (`dev`, `test`, `prod`, `default`).
+- **Version File Generation**: Optionally generate a version file.
+- **Deployment**: Optionally deploy the WAR file to a Tomcat server.
+- **Configurable Frontend Directory**: Specify the directory for frontend build assets.
+- **Automatic Configuration**: `createWar.config.json` is created with default values if not present.
+- **Clean-Up**: Automatically cleans up temporary files after creating the WAR file.
+
+## Prerequisites
+
+- Ensure you have Node.js installed for building frontend assets.
+- Have Python installed if using the script directly.
 
 ## How to Use
 
-### 1. Using `createWar.exe`
+### Using `createWar.exe`
 
-To simplify the process, the Python script has been converted into an executable file (`createWar.exe`). This allows you to use the tool without needing Python or its dependencies.
+For convenience, the Python script is packaged into an executable (`createWar.exe`) for easy use without needing Python or its dependencies.
 
 #### Steps:
 
-1. **Download or Copy the `createWar.exe` file** into the root folder of your project, where `package.json` is located.
+1. **Download or copy** the `createWar.exe` file into the root folder of your project, where `package.json` is located.
 
 2. **Run the `createWar.exe`**:
    - **Double-click the `createWar.exe` file** to run it.
-   - **Alternatively, invoke it via the command line** (useful for passing arguments):
+   - **Or, use the command line** (useful for passing arguments):
      ```bash
      ./createWar.exe
      ```
 
 3. The executable will:
-   - **Read the `createWar.config.json` file** or create it with default values if it doesn’t exist.
-   - **Build the project** using the specified profile or default profile.
+   - **Read or create** the `createWar.config.json` file with default values if it does not exist.
+   - **Build the project** using the specified profile or the default profile.
    - **Create the WAR file** and optionally **deploy it** to Tomcat.
 
-### Command-line Arguments (Optional)
+### Command-Line Arguments
 
-You can pass command-line arguments to override default settings. Here’s how to use them:
+You can pass command-line arguments to customize the behavior. Here’s how to use them:
 
 #### Example Usage:
 
 ```bash
-./createWar.exe --profile dev --tomcatpath "/opt/tomcat/webapps" --deploy --versiongen False --name "customapp.war"
+./createWar.exe --profile dev --tomcatpath "/opt/tomcat/webapps" --deploy --versiongen False --name "customapp.war" --distdir "build"
 ```
 
 #### Arguments:
@@ -51,6 +57,7 @@ You can pass command-line arguments to override default settings. Here’s how t
 | `--deploy`      | `-d`       | Deploy the WAR file to Tomcat.                                                            | `False`                      |
 | `--name`        | `-n`       | Specify the name of the WAR file.                                                         | `"myapp.war"`                |
 | `--versiongen`  | `-vg`      | Set to `True` to generate a version file. Set to `False` to skip version generation.      | `True`                       |
+| `--distdir`     | `-dd`      | Specify the directory for frontend build assets (e.g., `dist` for React, `out` for Next.js). | `"dist"`                     |
 
 #### Examples:
 
@@ -66,15 +73,15 @@ You can pass command-line arguments to override default settings. Here’s how t
    ./createWar.exe --profile prod --tomcatpath "/opt/tomcat/webapps" --deploy
    ```
 
-3. **Skip version file generation:**
+3. **Skip version file generation and use a custom assets directory:**
 
    ```bash
-   ./createWar.exe --versiongen False
+   ./createWar.exe --versiongen False --distdir "build"
    ```
 
-### 2. Configuration File (`createWar.config.json`)
+### Configuration File (`createWar.config.json`)
 
-The script uses a configuration file (`createWar.config.json`) to store default values. If the file doesn’t exist, it will be created with default values.
+The script uses a configuration file (`createWar.config.json`) to store default values. If the file does not exist, it will be created with default values.
 
 #### Example `createWar.config.json`:
 
@@ -84,7 +91,8 @@ The script uses a configuration file (`createWar.config.json`) to store default 
   "tomcatpath": "C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps",
   "deploy": false,
   "name": "myapp.war",
-  "versiongen": true
+  "versiongen": true,
+  "distdir": "dist"  # Configurable directory for frontend build assets
 }
 ```
 
@@ -94,54 +102,18 @@ The script uses a configuration file (`createWar.config.json`) to store default 
 |---------------|---------------------------------------------------------------------------------------------------|----------------------------------------------|
 | `profile`     | The build profile to use (`dev`, `test`, `prod`, `default`).                                      | `default`                                    |
 | `tomcatpath`  | The path to the Tomcat `webapps` folder for deployment (if `deploy` is `True`).                     | `C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps` |
-| `deploy`      | Set to `true` to automatically deploy the generated WAR file to Tomcat.                            | `false`                                      |
-| `name`        | The name of the WAR file to be generated.                                                          | `"myapp.war"`                                |
-| `versiongen`  | Set to `true` to generate a version file. Set to `false` to skip version generation.                | `true`                                       |
+| `deploy`      | Whether to deploy the WAR file to Tomcat.                                                          | `False`                                     |
+| `name`        | The name of the WAR file.                                                                         | `"myapp.war"`                               |
+| `versiongen`  | Whether to generate a version file.                                                               | `True`                                      |
+| `distdir`     | The directory for frontend build assets (e.g., `dist` for React or `out` for Next.js).              | `"dist"`                                    |
 
-### 3. Default Profile
+## Frontend Build Directories
 
-If the `profile` is set to `"default"`, the script runs the build command without specifying a profile:
+The `distdir` configuration allows you to specify the directory where your frontend build assets are located:
 
-```bash
-npm run build
-```
+- **React**: Typically `dist` (default), but can be configured.
+- **Next.js**: Typically `out` for static exports.
 
-### 4. Command-line Arguments Take Precedence
-
-Command-line arguments override the values in the configuration file. For example, running:
-
-```bash
-./createWar.exe --profile dev
-```
-
-will use the `dev` profile, even if the configuration file specifies a different profile.
-
-### 5. Script Workflow
-
-1. **Profile Selection**:
-   - The script builds the project using the specified or default profile.
-
-2. **Version File Generation**:
-   - Generates a version file if `versiongen` is `True`.
-   - Skips version generation if `versiongen` is `False`.
-
-3. **WAR File Creation**:
-   - Copies frontend assets from the `dist` directory into a temporary directory.
-   - Creates a `WEB-INF/web.xml` file.
-   - Zips all files into a WAR file.
-
-4. **Deployment (Optional)**:
-   - Copies the WAR file to the Tomcat `webapps` folder if `deploy` is `True`.
-
-5. **Clean-Up**:
-   - Deletes the temporary directory after creating the WAR file.
-
-### 6. Error Handling
-
-If an error occurs during deployment, an error message is displayed.
-
-```bash
-Error occurred while copying to Tomcat: <error_message>
-```
+Ensure that the `distdir` matches the directory used by your frontend framework to store build outputs.
 
 ---
