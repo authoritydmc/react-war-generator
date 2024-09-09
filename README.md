@@ -4,7 +4,7 @@ This Python script automates the creation of a WAR file based on a specified pro
 
 ## Features
 
-- **Create WAR files** based on different profiles (`dev`, `test`, `prod`).
+- **Create WAR files** based on different profiles (`dev`, `test`, `prod`). [ for info on what is profile check `sample_package.json` file.]
 - **Generate a version file** based on the `versiongen` setting.
 - **Deploy the WAR file** to a specified Tomcat server automatically.
 - **Customize settings** using command-line arguments or a configuration file (`createWar.config.json`).
