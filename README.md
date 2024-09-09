@@ -13,7 +13,51 @@ This Python script automates the creation of a WAR file based on a specified pro
 
 ## How to Use
 
-### 1. Command-line Arguments
+### 1. Using `createWar.exe`
+
+To make the process even simpler, the entire Python script has been converted into an executable file (`createWar.exe`). This allows you to use the tool without needing to have Python or the dependencies installed on your system. Simply follow the steps below to generate a WAR file for your project with minimal effort.
+
+### How to Use the `createWar.exe` File
+
+1. **Download or Copy the `createWar.exe` file** into the root folder of your project, where the `package.json` file is located. This is essential as the script looks for `npm` commands to build the project.
+
+2. **Run the `createWar.exe`**:
+   - **Double-click the `createWar.exe`** file to run it.
+   - Alternatively, you can **invoke it via the command line** (especially useful for passing arguments):
+     ```bash
+     ./createWar.exe
+     ```
+
+3. Once executed, the tool will:
+   - **Read the configuration file** (`createWar.config.json`) or create one if it doesn't exist.
+   - **Build the project** using the profile specified in the configuration file or command-line arguments.
+   - **Create the WAR file** and, if enabled, **deploy it** to the Tomcat server.
+
+### Command-line Arguments (Optional)
+
+If you want to pass command-line arguments while running the executable (instead of using the default values from the configuration file), you can invoke the `.exe` file from the terminal or command prompt with the necessary options:
+
+#### Example Usage:
+
+```bash
+./createWar.exe --profile dev --tomcatpath "/opt/tomcat/webapps" --deploy True --versiongen False
+```
+
+This will:
+- Use the `dev` profile to build the project.
+- Deploy the WAR file to `/opt/tomcat/webapps`.
+- Skip the version file generation (`--versiongen False`).
+
+### Benefits of Using `createWar.exe`
+
+- **No Python required**: You don't need Python or additional libraries installed to use the script.
+- **Simplified Process**: Just place the executable in the project root, double-click, and let it do the work for you.
+- **Configuration Flexibility**: Either edit the `createWar.config.json` file or pass arguments when invoking the `.exe` file via the command line.
+- **Fast and Easy Deployment**: If the `deploy` option is enabled, the WAR file is automatically deployed to Tomcat.
+
+---
+
+### 2. Command-line Arguments
 
 The script can be executed with command-line arguments for flexibility. Here are the available arguments:
 
