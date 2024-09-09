@@ -6,11 +6,11 @@ import json
 import versionGenerator
 
 # Step 0: Define valid profiles
-valid_profiles = ["dev", "test", "prod"]
+valid_profiles = ["dev", "test", "prod", "default"]
 
 # Default config
 default_config = {
-    "profile": "prod",
+    "profile": "default",
     "tomcatpath": "C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps",
     "deploy": False,
     "name": "myapp.war",
@@ -35,7 +35,7 @@ parser = argparse.ArgumentParser(
     description="Create a WAR file for a specific profile.")
 parser.add_argument(
     "--profile", "-p", choices=valid_profiles,
-    help="Specify the profile (dev/test/prod). Default is 'prod'.")
+    help="Specify the profile (dev/test/prod/default). Default is 'default'.")
 parser.add_argument(
     "--tomcatpath", "-tp",
     help="Specify the path to the Tomcat webapps folder.")
@@ -70,7 +70,7 @@ else:
     print("Skipping version file generation.")
 
 # Step 6: Build the frontend assets with the specified profile
-build_command = f"npm run build:{profile}"
+build_command = f"npm run build:{profile}" if profile != "default" else "npm run build"
 os.system(build_command)
 
 # Step 7: Create a temporary directory

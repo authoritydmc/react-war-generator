@@ -1,7 +1,7 @@
 {
-    "profile": "prod",
+    "profile": "default",
     "tomcatpath": "C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps",
     "deploy": false,
     "name": "myapp.war",
-    "versiongen": false
+    "versiongen": true
 }
