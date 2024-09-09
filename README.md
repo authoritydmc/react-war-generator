@@ -88,12 +88,14 @@ The script uses a configuration file (`createWar.config.json`) to store default 
 ```json
 {
   "profile": "default",
-  "tomcatpath": "C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps", # Set your TOMCAT webapps folder location 
+  "tomcatpath": "C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps",  # Set your Tomcat webapps folder location
   "deploy": false,
-  "name": "myapp.war", # this must match the uri path of your app . i.e check baseName in your package.json
+  "name": "myapp.war",  # The WAR file name determines the context path for your application. Ensure this name matches the context path used to access the application. For instance, if your application should be accessed via '/myapp/', set the name to 'myapp.war'. Failure to align this setting with your application's context path may result in the app failing to load properly.
   "versiongen": true,
   "distdir": "dist"  # Configurable directory for frontend build assets
 }
+
+
 ```
 
 #### Configuration Options:
