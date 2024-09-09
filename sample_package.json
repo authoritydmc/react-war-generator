@@ -1,0 +1,35 @@
+{
+    "name": "testApp",
+    "private": true,
+    "homepage": "/testApp/",
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+      "dev": "vite ",
+      "magic": "tsc && vite build",
+      "build": "env-cmd -f .env.prod npm run magic",
+      "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+      "preview": "vite preview",
+      "build:dev": "env-cmd -f .env npm run magic",
+      "build:test": "env-cmd -f .env.test npm run magic",
+      "build:prod": "env-cmd -f .env.prod npm run magic"
+    },
+    "dependencies": {
+    
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+   
+    },
+    "devDependencies": {
+
+      "env-cmd": "^10.1.0", //  important for profile management 
+      "eslint": "^8.38.0",
+      "eslint-plugin-react-hooks": "^4.6.0",
+      "eslint-plugin-react-refresh": "^0.3.4",
+      "postcss": "^8.4.23",
+      "tailwindcss": "^3.3.2",
+      "typescript": "^5.0.2",
+      "vite": "^4.5.0"
+    }
+  }
+  
