@@ -14,7 +14,8 @@ default_config = {
     "tomcatpath": "C:/Program Files/Apache Software Foundation/Tomcat 10.1/webapps",
     "deploy": False,
     "name": "myapp.war",
-    "versiongen": True
+    "versiongen": True,
+    "distdir": "dist"  # Added configurable dist directory
 }
 
 # Step 1: Check if createWar.config.json exists, if not create it with default values
@@ -48,6 +49,9 @@ parser.add_argument(
 parser.add_argument(
     "--versiongen", "-vg", action='store_true',
     help="Set True to generate a version file, default is True.")
+parser.add_argument(
+    "--distdir", "-dd",
+    help="Specify the directory which has the build files , default is 'dist'.")
 args = parser.parse_args()
 
 # Step 4: Override config with command-line arguments (args take precedence)
@@ -56,6 +60,7 @@ tomcat_path = args.tomcatpath if args.tomcatpath else config.get("tomcatpath")
 should_deploy = args.deploy if args.deploy else config.get("deploy", False)
 war_filename = args.name if args.name else config.get("name")
 generate_version = args.versiongen if args.versiongen else config.get("versiongen", True)
+dist_dir = args.distdir if args.distdir else config.get("distdir")
 
 current_directory = os.getcwd()
 
@@ -80,7 +85,8 @@ if os.path.exists(temp_dir):
 os.makedirs(temp_dir)
 
 # Step 8: Copy frontend assets to the temporary directory
-dist_dir = "dist"
+if not os.path.exists(dist_dir):
+    raise FileNotFoundError(f"Directory {dist_dir} does not exist.")
 for item in os.listdir(dist_dir):
     item_path = os.path.join(dist_dir, item)
     if os.path.isfile(item_path):
